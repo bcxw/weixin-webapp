@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.zee.ordering.dao.MealHistoryDao">
+
+	<select id="existHistory" resultType="java.lang.Integer" >
+		select count(*) from t_meal_history where weixinid=#{userId} and meal_date=DATE_FORMAT(#{mealDate},'%Y-%m-%d')
+	</select>
+	
+	<insert id="save" parameterType="MealHistory">
+		insert into t_meal_history(user_id,user_name,weixinid,restaurant_id,department_id,gender,meal_date,meal_week,breakfast,lunch,dinner) 
+		values
+		<foreach collection="mealHistoryList" item="item" separator="," >  
+	    	(#{item.userId},#{item.userName},#{item.weixinid},#{item.restaurantId},#{item.departmentId},#{item.gender},#{item.mealDate},#{item.mealWeek},#{item.breakfast},#{item.lunch},#{item.dinner})
+	    </foreach>
+	</insert>
+	
+	<select id="getUserMealHistory" resultType="Map" >
+		select * from t_meal_history where weixinid=#{wxUserId} and meal_date=DATE_FORMAT(#{mealDate},'%Y-%m-%d')
+	</select>
+	
+	<select id="getUserMealHistoryAll" resultType="Map" >
+		select * from t_meal_history where weixinid=#{wxUserId}  and meal_date &lt; curdate() order by meal_date desc
+	</select>
+	
+	<select id="countAllUserMealHistory" resultType="Map" >
+		select sum(breakfast) breakfast,sum(lunch) lunch,sum(dinner) dinner,meal_date from t_meal_history where restaurant_id=${restaurantId} and meal_date=DATE_FORMAT(#{mealDate},'%Y-%m-%d') group by meal_date
+	</select>
+	
+	<update id="updateMealHistory">
+		update t_meal_history set breakfast=${breakfast},lunch=${lunch},dinner=${dinner} where weixinid=#{wxUserId} and meal_date=DATE_FORMAT(#{mealDate},'%Y-%m-%d') 
+	</update>
+	
+	<select id="getCurrentMealHistory" resultType="Map" >
+		select h.*,d.name department
+		from t_meal_history h 
+		left join auth_department d on h.department_id=d.id
+		where h.restaurant_id=${restaurantId} and h.meal_date=DATE_FORMAT(#{mealDate},'%Y-%m-%d')
+		order by d.id
+	</select>
+	
+	<select id="getMealHistoryByMonth" resultType="MealHistory" >
+		select * from t_meal_history where #{month}=DATE_FORMAT(meal_date,'%Y-%m')
+	</select>
+	
+	<select id="deleteByWeixinIdDate" >
+		delete from t_meal_history where weixinid=#{weixinId} and meal_date=DATE_FORMAT(#{mealDate},'%Y-%m-%d')
+	</select>
+</mapper>

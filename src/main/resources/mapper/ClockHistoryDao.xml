@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.zee.ordering.dao.ClockHistoryDao">
+
+	<insert id="save" parameterType="ClockHistory">
+		insert into t_clock_history(clock_date,clock_code,clock_name,clock_detail) 
+		values
+		<foreach collection="list" item="item" separator="," >  
+	    	(#{item.clockDate},#{item.clockCode},#{item.clockName},#{item.clockDetail})
+	    </foreach>
+	</insert>
+	
+	<select id="getClockHistoryByMonth" resultType="ClockHistory" >
+		select * from t_clock_history where #{clockMonth}=DATE_FORMAT(clock_date,'%Y-%m') order by create_time desc;
+	</select>
+	
+</mapper>

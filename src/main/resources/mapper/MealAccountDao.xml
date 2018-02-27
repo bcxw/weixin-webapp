@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.zee.ordering.dao.MealAccountDao">
+
+	<select id="existData" resultType="Integer">
+		select count(*) from t_meal_account where DATE_FORMAT(meal_date,'%Y-%m')=#{mealMonth}
+	</select>
+	
+	<select id="getMealAccountByMonth" resultType="MealAccount">
+		select * from t_meal_account where DATE_FORMAT(meal_date,'%Y-%m')=#{mealMonth}
+	</select>
+	
+	<insert id="save" parameterType="MealAccount">
+		insert into t_meal_account(user_id,user_name,weixinid,restaurant_id,department_id,gender,meal_date,meal_week,breakfast,breakfast_clock,lunch,lunch_clock,dinner,dinner_clock,clock_detail,clock_name,clock_code) 
+		values
+		<foreach collection="list" item="item" separator="," >  
+	    	(#{item.userId},#{item.userName},#{item.weixinid},#{item.restaurantId},#{item.departmentId},#{item.gender},#{item.mealDate},#{item.mealWeek},#{item.breakfast},#{item.breakfastClock},#{item.lunch},#{item.lunchClock},#{item.dinner},#{item.dinnerClock},#{item.clockDetail},#{item.clockName},#{item.clockCode})
+	    </foreach>
+	</insert>
+	
+	<select id="getAllMealAccount"  resultType="MealAccount">
+		select * from t_meal_accountwhere 1=1
+		<if test="month!=null and month!=''">
+			and DATE_FORMAT(meal_date,'%Y-%m')=#{month}
+		</if>
+		<if test="name!=null and name!=''">
+			and user_name like concat('%',#{name},'%')
+		</if>
+		order by DATE_FORMAT(meal_date,'%Y-%m') desc,user_id,meal_date  limit #{page},#{size}
+	</select>
+	<select id="getAllMealAccountTotal" resultType="Integer">
+		select count(*) from t_meal_account where 1=1
+		<if test="month!=null and month!=''">
+			and DATE_FORMAT(meal_date,'%Y-%m')=#{month}
+		</if>
+		<if test="name!=null and name!=''">
+			and user_name like concat('%',#{name},'%')
+		</if>
+
+	</select>
+	
+</mapper>

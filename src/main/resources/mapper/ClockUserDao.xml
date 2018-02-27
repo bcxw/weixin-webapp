@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.zee.ordering.dao.ClockUserDao">
+
+	<select id="getAllMatchUser" resultType="Map">
+		select * from t_clock_user
+	</select>
+	
+	<select id="existMatchUser" resultType="Integer">
+		select count(*) from t_clock_user where clock_id=#{clockId} and clock_name=#{clockName}
+	</select>
+	
+	<insert id="save">
+		insert into t_clock_user(wx_id,wx_name,clock_id,clock_name) 
+		values(#{wxId},#{wxName},#{clockId},#{clockName})
+	</insert>
+	
+	<update id="update">
+		update t_clock_user set wx_name=#{wxName},clock_id=#{clockId},clock_name=#{clockName} where wx_id=#{wxId}
+	</update>
+	
+</mapper>

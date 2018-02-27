@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.zee.ordering.dao.MealDefaultDao">
+
+	<select id="getUserMealDefalut" resultType="Map" >
+		select * from t_meal_default where wx_user_id=#{wxUserId}
+	</select>
+	
+	<update id="update" parameterType="MealDefault">
+		update t_meal_default set user_id='${userId}',week0='${week0}',week1='${week1}',week2='${week2}',week3='${week3}',week4='${week4}',week5='${week5}',week6='${week6}' where wx_user_id='${wxUserId}' 
+	</update>
+	
+	<update id="insert" parameterType="MealDefault">
+		insert into t_meal_default(user_id,wx_user_id,week0,week1,week2,week3,week4,week5,week6) 
+		values(${userId},'${wxUserId}','${week0}','${week1}','${week2}','${week3}','${week4}','${week5}','${week6}') 
+	</update>
+	
+</mapper>

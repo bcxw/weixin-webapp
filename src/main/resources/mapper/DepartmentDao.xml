@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+    
+<mapper namespace="com.zee.ordering.dao.DepartmentDao">
+
+	<select id="existDepartment" parameterType="Department" resultType="Integer">
+		select count(*) from auth_department where id=#{id}
+	</select>
+	
+	<insert id="insert" parameterType="Department">
+		insert into auth_department(id,`name`,parentId,`order`) values(#{id},#{name},#{parentId},#{order});
+	</insert>
+	
+	<update id="update" parameterType="Department">
+		update auth_department set `name`=#{name},parentId=#{parentId},`order`=#{order} where id=#{id}
+	</update>
+	
+	<select id="getAllDepartments" resultType="Department">
+		select * from auth_department
+	</select>
+	
+</mapper>
